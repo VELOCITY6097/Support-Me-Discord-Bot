@@ -4,6 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Website with Signup Form, Table, and iFrame</title>
+    <style>
+        .password-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+        }
+        .password-container button {
+            padding: 8px 12px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <center><h3>Student Website with Signup Form, Table, and iFrame</h3></center>
@@ -20,7 +37,10 @@
             <br><br>
             
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter Your Password" required>
+            <div class="password-container">
+                <input type="password" id="password" name="password" placeholder="Enter Your Password" required>
+                <button type="button" onclick="togglePassword()">Show</button>
+            </div>
             <br><br>
             
             <input type="submit" value="Submit">
@@ -76,5 +96,20 @@
             allowfullscreen>
         </iframe>
     </center>
+
+    <script>
+        function togglePassword() {
+            const passwordField = document.getElementById('password');
+            const button = event.target;
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                button.textContent = 'Hide';
+            } else {
+                passwordField.type = 'password';
+                button.textContent = 'Show';
+            }
+        }
+    </script>
 </body>
 </html>
