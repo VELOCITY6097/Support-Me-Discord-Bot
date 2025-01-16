@@ -1,3 +1,15 @@
 # WEB-TUTORIALS
 LEARNING WEB TUTORIALS 
-TRIAL DISCORD WEBHOOK
+
+<br>
+<br>
+
+#Changelogs
+created index.html
+
+<br>
+<br>
+#Github Change-logs
+Tested Discord Integration
+
+Link To Discord - https://discord.gg/HpEhNaUQ
