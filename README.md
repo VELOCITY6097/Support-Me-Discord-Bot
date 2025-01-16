@@ -5,11 +5,13 @@ LEARNING WEB TUTORIALS
 <br>
 
 #Changelogs
+<br>
 created index.html
 
 <br>
 <br>
 #Github Change-logs
+<br>
 Tested Discord Integration
 
 Link To Discord - https://discord.gg/HpEhNaUQ
