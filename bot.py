@@ -261,6 +261,48 @@ async def ban(interaction: discord.Interaction, user: discord.Member, reason: st
 
     await interaction.response.send_message(f"✅ {user.mention} was banned! Reason: {reason}")
 
+# ⚡ **Command: Unban User**
+@bot.tree.command(name="unban", description="Unban a user using their ID")
+@app_commands.describe(user_id="User ID to unban")
+async def unban(interaction: discord.Interaction, user_id: str):
+    """Unbans a user from the server."""
+    
+    # Check if the command user has permission to unban
+    if not interaction.user.guild_permissions.ban_members:
+        return await interaction.response.send_message("⛔ You don’t have permission to unban users!", ephemeral=True)
+
+    try:
+        user_id = int(user_id)  # Convert to integer
+        banned_users = await interaction.guild.bans()  # Get ban list
+
+        # Find the user in the ban list
+        banned_user = next((ban_entry.user for ban_entry in banned_users if ban_entry.user.id == user_id), None)
+
+        if banned_user:
+            await interaction.guild.unban(banned_user)
+            users_collection.update_one({"_id": user_id}, {"$set": {"banned": False, "ban_reason": None}}, upsert=True)
+
+            await interaction.response.send_message(f"✅ {banned_user.mention} has been unbanned!")
+        else:
+            await interaction.response.send_message("❌ User is not banned!", ephemeral=True)
+
+    except ValueError:
+        await interaction.response.send_message("❌ Invalid user ID! Please enter a valid numeric ID.", ephemeral=True)
+    except discord.Forbidden:
+        await interaction.response.send_message("❌ I don’t have permission to unban this user!", ephemeral=True)
+    except Exception as e:
+        error_msg = f"❌ Error in /unban: {e}"
+        print(error_msg)
+
+        # Log the error in bot logs
+        if bot.log_channel_id:
+            log_channel = bot.get_channel(bot.log_channel_id)
+            if log_channel:
+                await log_channel.send(f"🚨 **Error Log** 🚨\n```{error_msg}```")
+
+        await interaction.response.send_message("❌ An error occurred while unbanning! Check the logs.", ephemeral=True)
+
+
 
 # ⚡ **Command: Mute User**
 def convert_time(duration: str):
