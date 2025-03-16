@@ -9,6 +9,7 @@ Temporary Role (/temprole) – Assign a role to a user for a specified time and 
 Track Penalties – Records bans and mutes, and tracks recent penalties (last 30 days).
 Automatic Logging – Logs errors and important actions in a bot-logs channel.
 <BR>
+<BR>
 🔹 Utility Features
 Bot Restart (/restart) – Authorized users can restart the bot and refresh the database.
 Copy User ID Button – Provides a button to copy a user’s ID directly.
