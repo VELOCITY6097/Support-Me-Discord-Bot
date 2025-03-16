@@ -3,4 +3,4 @@ pymongo
 python-dotenv
 motor
 apscheduler
-pip freeze > requirements.txt
+
