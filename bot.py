@@ -262,27 +262,36 @@ async def ban(interaction: discord.Interaction, user: discord.Member, reason: st
     await interaction.response.send_message(f"✅ {user.mention} was banned! Reason: {reason}")
 
 # ⚡ **Command: Unban User**
-@bot.tree.command(name="unban", description="Unban a user using their ID")
+@bot.tree.command(name="unban", description="Unban a user using their ID and keep a record of past bans")
 @app_commands.describe(user_id="User ID to unban")
 async def unban(interaction: discord.Interaction, user_id: str):
-    """Unbans a user from the server."""
+    """Unbans a user but keeps a record of past bans."""
     
-    # Check if the command user has permission to unban
+    # Check if the user has permission to unban
     if not interaction.user.guild_permissions.ban_members:
         return await interaction.response.send_message("⛔ You don’t have permission to unban users!", ephemeral=True)
 
     try:
         user_id = int(user_id)  # Convert to integer
-        banned_users = await interaction.guild.bans()  # Get ban list
+        banned_users = await interaction.guild.bans()  # Get the current ban list
 
-        # Find the user in the ban list
+        # Find the banned user
         banned_user = next((ban_entry.user for ban_entry in banned_users if ban_entry.user.id == user_id), None)
 
         if banned_user:
             await interaction.guild.unban(banned_user)
-            users_collection.update_one({"_id": user_id}, {"$set": {"banned": False, "ban_reason": None}}, upsert=True)
 
-            await interaction.response.send_message(f"✅ {banned_user.mention} has been unbanned!")
+            # Update database: Remove active ban but keep in history
+            users_collection.update_one(
+                {"_id": user_id},
+                {
+                    "$set": {"banned": False, "ban_reason": None},
+                    "$push": {"ban_history": {"date": datetime.utcnow().strftime("%Y-%m-%d"), "reason": "Unbanned"}}
+                },
+                upsert=True
+            )
+
+            await interaction.response.send_message(f"✅ {banned_user.mention} has been unbanned! The record is saved.")
         else:
             await interaction.response.send_message("❌ User is not banned!", ephemeral=True)
 
