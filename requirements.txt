@@ -1,6 +1,4 @@
-discord
-pymongo
-python-dotenv
-motor
-apscheduler
-
+📌 discord.py>=2.0.0
+📌 python-dotenv
+📌 pymongo
+📌 tzdata
